@@ -1,6 +1,6 @@
 defmodule MainModule do
   require Matrix
-  require Jogodavida
+  require Gameoflife
 
   def main do
 
@@ -10,11 +10,12 @@ defmodule MainModule do
     {qtd_iterations,_} = IO.gets("Escreva a quantidade de iterações: ") |> Integer.parse
 
     matrix = initialize_matrix(matrix_size)
-    IO.inspect matrix
+    |> Matrex.print()
 
-    Jogodavida.game(matrix, qtd_iterations)
+    Gameoflife.game(matrix, qtd_iterations)
+    |> Matrex.print()
 
-    # Jogodavida.hello()
+    :ok
 
   end
 

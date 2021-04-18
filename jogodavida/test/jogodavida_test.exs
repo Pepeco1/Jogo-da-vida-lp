@@ -1,8 +1,8 @@
-defmodule JogodavidaTest do
+defmodule GameoflifeTest do
   use ExUnit.Case
-  doctest Jogodavida
+  doctest Gameoflife
 
   test "greets the world" do
-    assert Jogodavida.hello() == :world
+    assert Gameoflife.hello() == :world
   end
 end

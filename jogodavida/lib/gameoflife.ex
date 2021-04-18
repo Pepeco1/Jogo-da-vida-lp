@@ -1,20 +1,19 @@
-defmodule Jogodavida do
+defmodule Gameoflife do
   @moduledoc """
-  Documentation for Jogodavida.
+  Documentation for Gameoflife.
   """
 
   @doc """
-  Initialize game
+  Initialize game.
   """
   def game(matrix, iterations) do
 
     game_recursive(matrix, iterations)
-    |> IO.inspect
 
   end
 
   @doc """
-  Calls itself recursively until iterations = 0, calling the main game loop in each iteration
+  Calls itself recursively until iterations = 0. Calls the main game loop in each iteration.
   """
   def game_recursive(matrix, iterations) do
     if iterations > 0 do
@@ -26,14 +25,14 @@ defmodule Jogodavida do
   end
 
   @doc """
-  Calls the game_loop_x with initial value 1
+  Calls the game_loop_x with initial value 1.
   """
   def game_loop(matrix) do
     game_loop_x(matrix, 1)
   end
 
   @doc """
-  Calls itself recursively until x is greater then matrix size. Calls game_loop_y in each iteration
+  Calls itself recursively until x is greater then matrix size. Calls game_loop_y in each iteration.
   """
   def game_loop_x(matrix, x) do
     if x <= matrix[:rows] do
@@ -45,7 +44,7 @@ defmodule Jogodavida do
   end
 
   @doc """
-  Calls itself recursively until y is greater then matrix size. Calls change cell in each iteration
+  Calls itself recursively until y is greater then matrix size. Calls change cell in each iteration.
   """
   def game_loop_y(matrix, x, y) do
     if y <= matrix[:rows] do
@@ -60,7 +59,7 @@ defmodule Jogodavida do
 
 
   @doc """
-  Changes the cell state if it's necessary
+  Changes the cell state if it's necessary.
   """
   def change_cell(cell, neighbors, matrix, x, y) do
     cond do
@@ -76,7 +75,7 @@ defmodule Jogodavida do
   second position is the sum of Alive Cells (1), last one
   is from Zombie Cells (2)
 
-  Eg: [2, 5, 1] -> 2 dead cells, 5 alive cells, 1 zombie cell
+  Eg: [2, 5, 1] -> 2 dead cells, 5 alive cells, 1 zombie cell.
   """
   def adjacent(matrix, line, column) do
     adjacentStates = [0, 0, 0]
@@ -85,7 +84,7 @@ defmodule Jogodavida do
   end
 
   @doc """
-  Mounts the positions of the neighbors of the cell in a tuple of tuples
+  Mounts the positions of the neighbors of the cell in a tuple of tuples.
   """
   def mount_pos_tuple(line, column) do
 
@@ -110,7 +109,7 @@ defmodule Jogodavida do
 
   @doc """
   Recursively calls itself, using the acc to accumulate in a list the sum of cells states in adjacent
-  cells
+  cells.
   """
   def adjacent_recursive(matrix, pos, posList, acc) do
 
@@ -135,14 +134,14 @@ defmodule Jogodavida do
 
 
   @doc """
-  Verify if there is 3 alive cells in neighbors and the cell is dead
+  Verify if there is 3 alive cells in neighbors and the cell is dead.
   """
   def reproduction_conditions(neighbors, cell) do
     Enum.at(neighbors, 1) == 3 and cell == 0.0
   end
 
   @doc """
-  Change the cell from dead to alive
+  Change the cell from dead to alive.
   """
   def reproduction(matrix, x, y) do
     Matrex.set(matrix, x, y, 1)

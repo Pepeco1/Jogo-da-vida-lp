@@ -1,9 +1,9 @@
-defmodule Jogodavida.MixProject do
+defmodule Gameoflife.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :jogodavida,
+      app: :Gameoflife,
       version: "0.1.0",
       elixir: "~> 1.9",
       start_permanent: Mix.env() == :prod,
