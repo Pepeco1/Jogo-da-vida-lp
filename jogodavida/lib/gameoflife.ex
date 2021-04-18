@@ -28,32 +28,32 @@ defmodule Gameoflife do
   Calls the game_loop_x with initial value 1.
   """
   def game_loop(matrix) do
-    game_loop_x(matrix, 1)
+    game_loop_x(matrix, matrix, 1)
   end
 
   @doc """
   Calls itself recursively until x is greater then matrix size. Calls game_loop_y in each iteration.
   """
-  def game_loop_x(matrix, x) do
+  def game_loop_x(newMatrix, matrix, x) do
     if x <= matrix[:rows] do
-      game_loop_y(matrix, x, 1)
-      |> game_loop_x(x+1)
+      game_loop_y(newMatrix, matrix, x, 1)
+      |> game_loop_x(matrix, x+1)
     else
-      matrix
+      newMatrix
     end
   end
 
   @doc """
   Calls itself recursively until y is greater then matrix size. Calls change cell in each iteration.
   """
-  def game_loop_y(matrix, x, y) do
+  def game_loop_y(newMatrix, matrix, x, y) do
     if y <= matrix[:rows] do
       neighbors = adjacent(matrix, x, y)
       Matrex.at(matrix, x, y)
-      |> change_cell(neighbors, matrix, x, y)
-      |> game_loop_y(x, y+1)
+      |> change_cell(neighbors, newMatrix, x, y)
+      |> game_loop_y(matrix, x, y+1)
     else
-      matrix
+      newMatrix
     end
   end
 
