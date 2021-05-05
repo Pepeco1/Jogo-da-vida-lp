@@ -18,9 +18,17 @@ defmodule Gameoflife do
   def game_recursive(matrix, iterations) do
     if iterations > 0 do
       game_loop(matrix)
-      |> game_recursive(iterations-1)
+      |> stop_or_continue(matrix, iterations)
     else
-      matrix
+      {matrix, iterations}
+    end
+  end
+
+  def stop_or_continue(new_matrix, matrix, i) do
+    if !is_matrix_equal(new_matrix, matrix) do
+      game_recursive(new_matrix, i - 1)
+    else
+      {new_matrix, i}
     end
   end
 
@@ -36,8 +44,10 @@ defmodule Gameoflife do
   """
   def game_loop_x(newMatrix, matrix, x) do
     if x <= matrix[:rows] do
+
       game_loop_y(newMatrix, matrix, x, 1)
       |> game_loop_x(matrix, x+1)
+
     else
       newMatrix
     end
@@ -63,7 +73,11 @@ defmodule Gameoflife do
   """
   def change_cell(cell, neighbors, matrix, x, y) do
     cond do
-      reproduction_conditions(neighbors, cell) -> reproduction(matrix, x, y)
+      reproduction_conditions(neighbors, cell) -> revive_cell(matrix, x, y)
+      infection_conditions(neighbors, cell) -> zombify_cell(matrix, x, y)
+      subpopulation_conditions(neighbors, cell) -> kill_cell(matrix, x, y)
+      superpopulation_conditions(neighbors, cell) -> kill_cell(matrix, x, y)
+      starvation_conditions(neighbors, cell) -> kill_cell(matrix, x, y)
       true -> matrix
     end
   end
@@ -132,6 +146,34 @@ defmodule Gameoflife do
 
   end
 
+  def is_matrix_equal(matrix1, matrix2) do
+    list_equals(Matrex.to_list(matrix1), Matrex.to_list(matrix2))
+  end
+
+  def list_equals(list1, list2) do
+
+    if length(list1) != length(list2) do
+      false
+    end
+
+    list_equals_rec(list1, list2)
+
+  end
+
+  def list_equals_rec([h1|t1], [h2|t2]) do
+
+    if(h1 != h2) do
+      false
+    else
+      list_equals_rec(t1, t2)
+    end
+
+  end
+
+  def list_equals_rec([], []) do
+    true
+  end
+
 
   @doc """
   Verify if there is 3 alive cells in neighbors and the cell is dead.
@@ -141,10 +183,54 @@ defmodule Gameoflife do
   end
 
   @doc """
-  Change the cell from dead to alive.
+  Verify if there is at least 1 cell in neighbors that is a zombie and the current cell is alive.
   """
-  def reproduction(matrix, x, y) do
+  def infection_conditions(neighbors, cell) do
+    Enum.at(neighbors, 2) >= 1 and cell == 1.0
+  end
+
+  @doc """
+  Verify if there is less than 2 alive and no zombies cells in neighbors and the current cell is alive.
+  """
+  def subpopulation_conditions(neighbors, cell) do
+    Enum.at(neighbors, 1) < 2 and Enum.at(neighbors,2) == 0 and cell == 1.0
+  end
+
+  @doc """
+  Verify if there more than 3 alive and no zombies cells in neighbors and the current cell is alive.
+  """
+  def superpopulation_conditions(neighbors, cell) do
+    Enum.at(neighbors, 1) > 3 and Enum.at(neighbors,2) == 0 and cell == 1.0
+  end
+
+  @doc """
+  Verify if there is no cell alive current cell is a zombie.
+  """
+  def starvation_conditions(neighbors, cell) do
+    Enum.at(neighbors, 1) == 0 and cell == 2.0
+  end
+
+  @doc """
+  Change cell state to dead
+  """
+  def kill_cell(matrix, x, y) do
+    Matrex.set(matrix, x, y, 0)
+  end
+
+  @doc """
+  Change cell state to alive
+  """
+  def revive_cell(matrix, x, y) do
     Matrex.set(matrix, x, y, 1)
   end
+
+  @doc """
+  Change cell state to zombie
+  """
+  def zombify_cell(matrix, x, y) do
+    Matrex.set(matrix, x, y, 2)
+  end
+
+
 
 end

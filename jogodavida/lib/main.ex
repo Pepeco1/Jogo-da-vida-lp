@@ -12,8 +12,12 @@ defmodule MainModule do
     matrix = initialize_matrix(matrix_size)
     |> Matrex.print()
 
-    Gameoflife.game(matrix, qtd_iterations)
-    |> Matrex.print()
+    {final_matrix, iterations_left} = Gameoflife.game(matrix, qtd_iterations)
+
+    Matrex.print(final_matrix)
+
+    print_result_iterations(qtd_iterations, iterations_left)
+
 
     :ok
 
@@ -22,6 +26,18 @@ defmodule MainModule do
   def initialize_matrix(size) do
 
     Matrex.new(size, size, fn -> round(Enum.random(0..2)) end)
+
+  end
+
+  def print_result_iterations(qtd_iterations, iterations_left) do
+
+    result = qtd_iterations - iterations_left
+
+    if result > 0 do
+        IO.puts "Jogo estabilizou em #{result} iterações"
+    else
+      IO.puts "Jogo executou todas iterações"
+    end
 
   end
 
