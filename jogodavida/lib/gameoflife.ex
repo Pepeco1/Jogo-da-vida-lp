@@ -117,14 +117,6 @@ defmodule Gameoflife do
   Mounts the positions of the neighbors of the cell in a tuple of tuples.
   """
   def mount_pos_tuple(line, column) do
-
-    # tuple = {}
-    # for x <- line-1..line+1 do
-    #   for y <- column-1..column+1 do
-    #     Tuple.append(tuple, {x, y})
-    #   end
-    # end |>
-    # Tuple.delete_at(4)
     {
       {line-1, column-1},
       {line-1, column},
@@ -170,9 +162,9 @@ defmodule Gameoflife do
 
     if length(list1) != length(list2) do
       false
+    else
+      list_equals_rec(list1, list2)
     end
-
-    list_equals_rec(list1, list2)
 
   end
 
