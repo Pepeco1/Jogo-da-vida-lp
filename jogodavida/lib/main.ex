@@ -1,5 +1,4 @@
 defmodule MainModule do
-  require Matrix
   require Gameoflife
 
   def main do
