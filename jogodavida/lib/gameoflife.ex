@@ -6,29 +6,45 @@ defmodule Gameoflife do
   @doc """
   Initialize game.
   """
-  def game(matrix, iterations) do
+  def game(matrix, info) do
 
-    game_recursive(matrix, iterations)
+    #{matrix_size, qtd_iterations, automatic, step}
+    game_recursive(matrix, info)
 
   end
 
   @doc """
   Calls itself recursively until iterations = 0. Calls the main game loop in each iteration.
   """
-  def game_recursive(matrix, iterations) do
+  def game_recursive(matrix, {iterations, step}) do
     if iterations > 0 do
-      game_loop(matrix)
-      |> stop_or_continue(matrix, iterations)
+      new_matrix = game_loop(matrix)
+
+      if should_stop(new_matrix, matrix) do
+        {new_matrix, iterations}
+      else
+        print_if_step(new_matrix,step)
+        |> game_recursive({iterations - 1, step})
+      end
     else
       {matrix, iterations}
     end
   end
 
-  def stop_or_continue(new_matrix, matrix, i) do
+  def print_if_step(matrix, step) do
+
+    if(step == true) do
+      Matrex.print(matrix)
+    end
+
+    matrix
+  end
+
+  def should_stop(new_matrix, matrix) do
     if !is_matrix_equal(new_matrix, matrix) do
-      game_recursive(new_matrix, i - 1)
+      false
     else
-      {new_matrix, i}
+      true
     end
   end
 
